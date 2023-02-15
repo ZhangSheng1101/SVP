@@ -16,7 +16,7 @@ def create_parser():
 
     # dataset parameters
     parser.add_argument('--batch_size', default=16, type=int, help='Batch size')
-    parser.add_argument('--val_batch_size', default=16, type=int, help='Batch size')
+    parser.add_argument('--val_batch_size', default=1, type=int, help='Batch size')
     parser.add_argument('--data_root', default='./data/')
     parser.add_argument('--dataname', default='mmnist', choices=['mmnist', 'taxibj'])
     parser.add_argument('--num_workers', default=8, type=int)
@@ -42,6 +42,6 @@ if __name__ == '__main__':
 
     exp = Exp(args)
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>  start <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
-    exp.train(args)
+    # exp.train(args)
     print('>>>>>>>>>>>>>>>>>>>>>>>>>>>> testing <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
     mse = exp.test(args)

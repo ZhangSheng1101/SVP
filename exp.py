@@ -152,9 +152,16 @@ class Exp:
     def test(self, args):
         self.model.eval()
         inputs_lst, trues_lst, preds_lst = [], [], []
+        starter, ender = torch.cuda.Event(enable_timing=True)
+        torch.cuda.Event(enable_timing=True)
+        timings = np.zeros((len(self.test_loader), 1))
         vali_pbar = tqdm(self.test_loader)
         for i, (batch_x, batch_y) in enumerate(vali_pbar):
+            starter.record()
             pred_y = self.model(batch_x.to(self.device))
+            ender.record()
+            torch.cuda.synchronize()
+            timings[i] = starter.elapsed_time(ender)
             list(map(lambda data, lst: lst.append(data.detach().cpu().numpy()), [
                  batch_x, batch_y, pred_y], [inputs_lst, trues_lst, preds_lst]))
 
@@ -164,7 +171,7 @@ class Exp:
         folder_path = self.path+'/results/{}/sv/'.format(args.ex_name)
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
-
+        print(np.mean(timings))
         # mse, mae, ssim, psnr = metric(preds, trues, self.test_loader.dataset.mean, self.test_loader.dataset.std, True)
         # print_log('mse:{:.4f}, mae:{:.4f}, ssim:{:.4f}, psnr:{:.4f}'.format(mse, mae, ssim, psnr))
 

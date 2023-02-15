@@ -152,7 +152,8 @@ class Exp:
     def test(self, args):
         self.model.eval()
         inputs_lst, trues_lst, preds_lst = [], [], []
-        for batch_x, batch_y in self.test_loader:
+        vali_pbar = tqdm(self.test_loader)
+        for i, (batch_x, batch_y) in enumerate(vali_pbar):
             pred_y = self.model(batch_x.to(self.device))
             list(map(lambda data, lst: lst.append(data.detach().cpu().numpy()), [
                  batch_x, batch_y, pred_y], [inputs_lst, trues_lst, preds_lst]))

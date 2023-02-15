@@ -26,7 +26,7 @@ def load_fixed_set(root):
 
 
 class MovingMNIST(data.Dataset):
-    def __init__(self, root, is_train=True, n_frames_input=10, n_frames_output=10, num_objects=[2],
+    def __init__(self, root, is_train=True, n_frames_input=1, n_frames_output=4, num_objects=[2],
                  transform=None):
         super(MovingMNIST, self).__init__()
 
@@ -47,7 +47,7 @@ class MovingMNIST(data.Dataset):
         self.n_frames_total = self.n_frames_input + self.n_frames_output
         self.transform = transform
         # For generating data
-        self.image_size_ = 64
+        self.image_size_ = 512
         self.digit_size_ = 28
         self.step_length_ = 0.1
 
@@ -97,19 +97,19 @@ class MovingMNIST(data.Dataset):
         '''
         data = np.zeros((self.n_frames_total, self.image_size_,
                          self.image_size_), dtype=np.float32)
-        for n in range(num_digits):
-            # Trajectory
-            start_y, start_x = self.get_random_trajectory(self.n_frames_total)
-            ind = random.randint(0, self.mnist.shape[0] - 1)
-            digit_image = self.mnist[ind]
-            for i in range(self.n_frames_total):
-                top = start_y[i]
-                left = start_x[i]
-                bottom = top + self.digit_size_
-                right = left + self.digit_size_
-                # Draw digit
-                data[i, top:bottom, left:right] = np.maximum(
-                    data[i, top:bottom, left:right], digit_image)
+        # for n in range(num_digits):
+        #     # Trajectory
+        #     start_y, start_x = self.get_random_trajectory(self.n_frames_total)
+        #     ind = random.randint(0, self.mnist.shape[0] - 1)
+        #     digit_image = self.mnist[ind]
+        #     for i in range(self.n_frames_total):
+        #         top = start_y[i]
+        #         left = start_x[i]
+        #         bottom = top + self.digit_size_
+        #         right = left + self.digit_size_
+        #         # Draw digit
+        #         data[i, top:bottom, left:right] = np.maximum(
+        #             data[i, top:bottom, left:right], digit_image)
 
         data = data[..., np.newaxis]
         return data
@@ -137,10 +137,11 @@ class MovingMNIST(data.Dataset):
 
         output = torch.from_numpy(output / 255.0).contiguous().float()
         input = torch.from_numpy(input / 255.0).contiguous().float()
+        print(input.shape, output.shape)
         return input, output
 
     def __len__(self):
-        return self.length
+        return 2000
 
 
 def load_data(
@@ -150,7 +151,7 @@ def load_data(
     train_set = MovingMNIST(root=data_root, is_train=True,
                             n_frames_input=10, n_frames_output=10, num_objects=[2])
     test_set = MovingMNIST(root=data_root, is_train=False,
-                           n_frames_input=10, n_frames_output=10, num_objects=[2])
+                           n_frames_input=1, n_frames_output=4, num_objects=[2])
 
     dataloader_train = torch.utils.data.DataLoader(
         train_set, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)

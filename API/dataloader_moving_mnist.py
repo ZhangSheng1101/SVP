@@ -141,7 +141,7 @@ class MovingMNIST(data.Dataset):
 
         input = input.repeat(1, 3, 8, 8)
         output = output.repeat(1, 3, 8, 8)
-        print(input.shape, output.shape)
+        # print(input.shape, output.shape)
         return input, output
 
     def __len__(self):

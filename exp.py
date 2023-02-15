@@ -152,8 +152,7 @@ class Exp:
     def test(self, args):
         self.model.eval()
         inputs_lst, trues_lst, preds_lst = [], [], []
-        starter, ender = torch.cuda.Event(enable_timing=True)
-        torch.cuda.Event(enable_timing=True)
+        starter, ender = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
         timings = np.zeros((len(self.test_loader), 1))
         vali_pbar = tqdm(self.test_loader)
         for i, (batch_x, batch_y) in enumerate(vali_pbar):

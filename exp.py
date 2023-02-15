@@ -161,6 +161,7 @@ class Exp:
             ender.record()
             torch.cuda.synchronize()
             timings[i] = starter.elapsed_time(ender)
+            print(timings[i])
             list(map(lambda data, lst: lst.append(data.detach().cpu().numpy()), [
                  batch_x, batch_y, pred_y], [inputs_lst, trues_lst, preds_lst]))
 

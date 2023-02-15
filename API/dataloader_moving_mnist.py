@@ -145,7 +145,7 @@ class MovingMNIST(data.Dataset):
         return input, output
 
     def __len__(self):
-        return 2000
+        return 500
 
 
 def load_data(

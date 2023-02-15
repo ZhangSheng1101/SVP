@@ -47,7 +47,7 @@ class MovingMNIST(data.Dataset):
         self.n_frames_total = self.n_frames_input + self.n_frames_output
         self.transform = transform
         # For generating data
-        self.image_size_ = 512
+        self.image_size_ = 64
         self.digit_size_ = 28
         self.step_length_ = 0.1
 

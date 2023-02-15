@@ -136,7 +136,11 @@ class MovingMNIST(data.Dataset):
             output = []
 
         output = torch.from_numpy(output / 255.0).contiguous().float()
+
         input = torch.from_numpy(input / 255.0).contiguous().float()
+
+        input = input.repeat(1, 3, 8, 8)
+        output = output.repeat(1, 3, 8, 8)
         print(input.shape, output.shape)
         return input, output
 
